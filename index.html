@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Undangan Pernikahan - Syifa & Ahmad</title>
+  <!-- Google Font bergaya elegan -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      background-color: #1a1a1a;
+      font-family: 'Montserrat', sans-serif;
+      overflow: hidden;
+    }
+
+    /* CONTAINER UTAMA (Ukuran pas layar HP) */
+    .mobile-wrapper {
+      max-width: 480px;
+      height: 100%;
+      margin: 0 auto;
+      position: relative;
+      background-color: #000;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      overflow: hidden;
+    }
+
+    /* 1. LAYER COVER (OPENING) */
+    .cover-screen {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      /* GANTI NAMA FILE GAMBAR DI SINI */
+      background: url('multimedia/cover.jpg') no-repeat center center;
+      background-size: cover;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+      padding-bottom: 45px;
+      z-index: 10;
+      /* Transisi sinematik: fade out + subtle zoom */
+      opacity: 1;
+      transform: scale(1);
+      transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Kotak Box Undangan */
+    .invitation-box {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(4px);
+      padding: 16px 24px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(139, 115, 85, 0.3);
+      width: 82%;
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .invitation-box p.kepada {
+      font-size: 0.85rem;
+      color: #5c554b;
+      margin-bottom: 3px;
+      letter-spacing: 0.5px;
+    }
+
+    .invitation-box h3.tamu {
+      font-family: 'Cinzel', Serif;
+      font-size: 1.2rem;
+      color: #555942;
+      margin-bottom: 14px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    /* Tombol Buka Undangan */
+    .btn-open {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #555942, #555942);
+      color: #fff;
+      border: none;
+      padding: 11px 26px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      border-radius: 25px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+      transition: all 0.3s ease;
+    }
+
+    .btn-open:hover {
+      background: linear-gradient(135deg, #555942, #555942);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+    }
+
+    /* 2. LAYER VIDEO (KONTEN) */
+    .video-screen {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #000;
+      z-index: 1;
+    }
+
+    .video-screen video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* Pas layar HP */
+    }
+
+    /* Efek Cinematic Fade Saat Cover Dibuka */
+    .cover-screen.hide {
+      opacity: 0;
+      transform: scale(1.05); /* Sedikit zoom lembut sebelum menghilang ke video */
+      pointer-events: none;
+    }
+
+    .cover-screen.hide .invitation-box {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="mobile-wrapper">
+    <!-- COVER DEPAN -->
+    <div class="cover-screen" id="coverScreen">
+      <div class="invitation-box">
+        <p class="kepada">Kepada Yth.</p>
+        <h3 class="tamu" id="guestName">Tamu Undangan</h3>
+        
+        <button class="btn-open" id="btnOpen">
+          <span>Buka Undangan</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- AREA VIDEO -->
+    <div class="video-screen">
+      <!-- GANTI NAMA FILE VIDEO DI SINI -->
+      <video id="weddingVideo" src="multimedia/video.mp4" playsinline controls></video>
+    </div>
+  </div>
+
+  <script>
+    // 1. Logika Klik Tombol Buka Undangan
+    const btnOpen = document.getElementById('btnOpen');
+    const coverScreen = document.getElementById('coverScreen');
+    const weddingVideo = document.getElementById('weddingVideo');
+
+    btnOpen.addEventListener('click', function () {
+      // Efek dissolve cinematic
+      coverScreen.classList.add('hide');
+      
+      // Putar video otomatis
+      weddingVideo.play();
+    });
+
+    // 2. Ambil nama tamu otomatis dari URL link (?to=Nama+Tamu)
+    const urlParams = new URLSearchParams(window.location.search);
+    const guestParam = urlParams.get('to');
+    if (guestParam) {
+      document.getElementById('guestName').textContent = guestParam;
+    }
+  </script>
+</body>
+</html>
